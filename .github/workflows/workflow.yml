@@ -2,18 +2,17 @@ name: Deploy
 
 on:
   push:
-    branches:
-      - master
+  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
       - name: Install dependencies
         run: npm install
-      - name: Build Website
+      - name: Build 
         run: npm run build
       - name: Set AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -22,4 +21,4 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Copy to S3
-        run: aws s3 sync ./build/. s3://opentemplate
+        run: aws s3 sync ./build/. s3://cloudmanagerteam
